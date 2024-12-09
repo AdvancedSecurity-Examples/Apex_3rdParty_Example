@@ -1,7 +1,14 @@
 
 
-name: Pmd-Scan
-on: [push]
+name: PMD_Apex_CodeScanning
+
+on:
+  push:
+   branches: [ main ]
+
+  pull_request:
+    branches: [ main ]
+    
 jobs:
   apex:
     permissions:
@@ -11,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
     - name: Setup PMD
@@ -19,6 +26,6 @@ jobs:
     - name: APEX full scan
       run: pmd check --dir ./project-force/pf-app/main/default/classes/*.cls --rulesets ./config/pmd-ruleset.xml --no-fail-on-violation -f sarif -D -r pmd-report.sarif
     - name: Upload SARIF file
-      uses: github/codeql-action/upload-sarif@v2
+      uses: github/codeql-action/upload-sarif@v3
       with:
         sarif_file: pmd-report.sarif
